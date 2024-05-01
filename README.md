@@ -24,6 +24,12 @@ Detailed API documentation is available at the `/api-docs` endpoint when the ser
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
+## Notes for my future self
+
+- This is deployed using Glitch and is available at (https://gleaming-held-wandflower.glitch.me).
+- To update the awards data we should just need to update AcademyAwards.json with an updated version.
+- Anytime you make changes to this content you'll need to reimport it to Glitch by clicking "Tools > Import and Export" at the bottom of the Glitch project page.
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
