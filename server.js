@@ -151,13 +151,13 @@ app.get('/awards', (req, res) => {
   let params = [];
 
   Object.keys(req.query).forEach((key) => {
-    if (['year', 'imdb', 'tmdb', 'title'].includes(key)) {
-      query += ` AND ${key} = ?`;
-      params.push(req.query[key]);
+    if (['year', 'imdb', 'tmdb'].includes(key)) {
+      query += ` AND LOWER(${key}) = ?`;
+      params.push(req.query[key].toLowerCase());
     } else if (['isWinner', 'isActing'].includes(key)) {
       query += ` AND ${key} = ?`;
-      params.push(['true', '1', 'TRUE'].includes(req.query[key]) ? 'TRUE' : 'FALSE');
-    } else if (key === 'category') {
+      params.push(['true', '1', 'TRUE'].includes(req.query[key].toLowerCase()) ? 'TRUE' : 'FALSE');
+    } else if (['title', 'category'].includes(key)) {
       query += ` AND LOWER(${key}) LIKE ?`;
       params.push(`%${req.query[key].toLowerCase()}%`);
     }
