@@ -6,7 +6,6 @@ const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const app = express();
-const port = 3000;
 
 let db = new sqlite3.Database('./myDatabase.db', (err) => {
   if (err) {
@@ -81,8 +80,9 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });
 
 /**
