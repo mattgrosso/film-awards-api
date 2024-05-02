@@ -171,8 +171,6 @@ app.get('/awards', (req, res) => {
       res.status(404).send('No awards found for these parameters');
     } else {
       rows.forEach(row => {
-        // row.isActing = row.isActing === 1;
-        // row.isWinner = row.isWinner === 1;
         try {
           const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
           row.names = JSON.parse(JSON.parse(correctedNames));
@@ -226,8 +224,6 @@ app.get('/awards/category/:category', (req, res) => {
       res.status(404).send('No awards found for this category');
     } else {
       rows.forEach(row => {
-        row.isActing = row.isActing === 1;
-        row.isWinner = row.isWinner === 1;
         const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
         row.names = JSON.parse(JSON.parse(correctedNames));
       });
@@ -266,8 +262,6 @@ app.get('/awards/imdb/:imdb', (req, res) => {
       res.status(404).send('No awards found for this imdb');
     } else {
       rows.forEach(row => {
-        row.isActing = row.isActing === 1;
-        row.isWinner = row.isWinner === 1;
         const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
         row.names = JSON.parse(JSON.parse(correctedNames));
       });
@@ -306,8 +300,6 @@ app.get('/awards/tmdb/:tmdb', (req, res) => {
       res.status(404).send('No awards found for this tmdb');
     } else {
       rows.forEach(row => {
-        row.isActing = row.isActing === 1;
-        row.isWinner = row.isWinner === 1;
         const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
         row.names = JSON.parse(JSON.parse(correctedNames));
       });
@@ -346,8 +338,6 @@ app.get('/awards/title/:title', (req, res) => {
       res.status(404).send('No awards found for this title');
     } else {
       rows.forEach(row => {
-        row.isActing = row.isActing === 1;
-        row.isWinner = row.isWinner === 1;
         const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
         row.names = JSON.parse(JSON.parse(correctedNames));
       });
@@ -399,8 +389,6 @@ app.get('/awards/person/:person', (req, res) => {
       res.status(404).send('No awards found for this person');
     } else {
       filteredRows.forEach(row => {
-        row.isActing = row.isActing === 1;
-        row.isWinner = row.isWinner === 1;
         try {
           const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
           row.names = JSON.parse(JSON.parse(correctedNames));
