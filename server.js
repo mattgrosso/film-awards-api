@@ -39,48 +39,48 @@ app.use(cors());
 //   }
 // });
 
-// Run this to build the database
-db.run(`CREATE TABLE awards (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  year INTEGER,
-  ceremony INTEGER,
-  ceremony_date TEXT,
-  film_years TEXT,
-  category TEXT,
-  original_category TEXT,
-  imdb TEXT,
-  tmdb TEXT,
-  release_date TEXT,
-  img TEXT,
-  isActing TEXT,
-  isWinner TEXT,
-  title TEXT,
-  names TEXT,
-  notes TEXT
-)`, (err) => {
-  if (err) {
-    console.error(err.message, "(But that's okay.)");
-  } else {
-    // If table is just created, insert data from JSON file
-    fs.readFile('./AcademyAwards.json', 'utf8', (err, data) => {
-      if (err) throw err;
-      let awards = JSON.parse(data);
+// // Run this to build the database
+// db.run(`CREATE TABLE awards (
+//   id INTEGER PRIMARY KEY AUTOINCREMENT,
+//   year INTEGER,
+//   ceremony INTEGER,
+//   ceremony_date TEXT,
+//   film_years TEXT,
+//   category TEXT,
+//   original_category TEXT,
+//   imdb TEXT,
+//   tmdb TEXT,
+//   release_date TEXT,
+//   img TEXT,
+//   isActing TEXT,
+//   isWinner TEXT,
+//   title TEXT,
+//   names TEXT,
+//   notes TEXT
+// )`, (err) => {
+//   if (err) {
+//     console.error(err.message, "(But that's okay.)");
+//   } else {
+//     // If table is just created, insert data from JSON file
+//     fs.readFile('./AcademyAwards.json', 'utf8', (err, data) => {
+//       if (err) throw err;
+//       let awards = JSON.parse(data);
     
-      // Preprocess the data
-      awards = awards.map(award => {
-        award.isActing = (award.isActing.toLowerCase() === 'true') ? 1 : 0;
-        award.isWinner = (award.isWinner.toLowerCase() === 'true') ? 1 : 0;
-        return award;
-      });
+//       // Preprocess the data
+//       awards = awards.map(award => {
+//         award.isActing = (award.isActing.toLowerCase() === 'true') ? 1 : 0;
+//         award.isWinner = (award.isWinner.toLowerCase() === 'true') ? 1 : 0;
+//         return award;
+//       });
     
-      let stmt = db.prepare('INSERT INTO awards (year, ceremony, ceremony_date, film_years, category, original_category, imdb, tmdb, release_date, img, isActing, isWinner, title, names, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-      for (let award of awards) {
-        stmt.run([award.year, award.ceremony, award.ceremony_date, award.film_years, award.category, award.original_category, award.imdb, award.tmdb, award.release_date, award.img, award.isActing, award.isWinner, award.title, JSON.stringify(award.names), award.notes]);
-      }
-      stmt.finalize();
-    });
-  }
-});
+//       let stmt = db.prepare('INSERT INTO awards (year, ceremony, ceremony_date, film_years, category, original_category, imdb, tmdb, release_date, img, isActing, isWinner, title, names, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+//       for (let award of awards) {
+//         stmt.run([award.year, award.ceremony, award.ceremony_date, award.film_years, award.category, award.original_category, award.imdb, award.tmdb, award.release_date, award.img, award.isActing, award.isWinner, award.title, JSON.stringify(award.names), award.notes]);
+//       }
+//       stmt.finalize();
+//     });
+//   }
+// });
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
@@ -171,8 +171,8 @@ app.get('/awards', (req, res) => {
       res.status(404).send('No awards found for these parameters');
     } else {
       rows.forEach(row => {
-        row.isActing = row.isActing === 'TRUE' ? true : false;
-        row.isWinner = row.isWinner === 'TRUE' ? true : false;
+        row.isActing = row.isActing === 1;
+        row.isWinner = row.isWinner === 1;
         try {
           const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
           row.names = JSON.parse(JSON.parse(correctedNames));
@@ -226,8 +226,10 @@ app.get('/awards/category/:category', (req, res) => {
       res.status(404).send('No awards found for this category');
     } else {
       rows.forEach(row => {
-        row.isActing = Boolean(row.isActing);
-        row.names = JSON.parse(row.names);
+        row.isActing = row.isActing === 1;
+        row.isWinner = row.isWinner === 1;
+        const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
+        row.names = JSON.parse(JSON.parse(correctedNames));
       });
       res.json(rows);
     }
@@ -264,8 +266,10 @@ app.get('/awards/imdb/:imdb', (req, res) => {
       res.status(404).send('No awards found for this imdb');
     } else {
       rows.forEach(row => {
-        row.isActing = Boolean(row.isActing);
-        row.names = JSON.parse(row.names);
+        row.isActing = row.isActing === 1;
+        row.isWinner = row.isWinner === 1;
+        const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
+        row.names = JSON.parse(JSON.parse(correctedNames));
       });
       res.json(rows);
     }
@@ -302,8 +306,10 @@ app.get('/awards/tmdb/:tmdb', (req, res) => {
       res.status(404).send('No awards found for this tmdb');
     } else {
       rows.forEach(row => {
-        row.isActing = Boolean(row.isActing);
-        row.names = JSON.parse(row.names);
+        row.isActing = row.isActing === 1;
+        row.isWinner = row.isWinner === 1;
+        const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
+        row.names = JSON.parse(JSON.parse(correctedNames));
       });
       res.json(rows);
     }
@@ -340,8 +346,10 @@ app.get('/awards/title/:title', (req, res) => {
       res.status(404).send('No awards found for this title');
     } else {
       rows.forEach(row => {
-        row.isActing = Boolean(row.isActing);
-        row.names = JSON.parse(row.names);
+        row.isActing = row.isActing === 1;
+        row.isWinner = row.isWinner === 1;
+        const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
+        row.names = JSON.parse(JSON.parse(correctedNames));
       });
       res.json(rows);
     }
@@ -391,7 +399,8 @@ app.get('/awards/person/:person', (req, res) => {
       res.status(404).send('No awards found for this person');
     } else {
       filteredRows.forEach(row => {
-        row.isActing = Boolean(row.isActing);
+        row.isActing = row.isActing === 1;
+        row.isWinner = row.isWinner === 1;
         try {
           const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
           row.names = JSON.parse(JSON.parse(correctedNames));
