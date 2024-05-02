@@ -32,7 +32,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use(cors());
 
-// Run this to clear the database
+// // Run this to clear the database
 // db.run(`DROP TABLE IF EXISTS awards`, (err) => {
 //   if (err) {
 //     console.error(err.message);
@@ -40,41 +40,47 @@ app.use(cors());
 // });
 
 // Run this to build the database
-// db.run(`CREATE TABLE awards (
-//   id INTEGER PRIMARY KEY AUTOINCREMENT,
-//   year INTEGER,
-//   ceremony INTEGER,
-//   ceremony_date TEXT,
-//   film_years TEXT,
-//   category TEXT,
-//   original_category TEXT,
-//   imdb TEXT,
-//   tmdb TEXT,
-//   release_date TEXT,
-//   img TEXT,
-//   isActing TEXT,
-//   isWinner TEXT,
-//   title TEXT,
-//   names TEXT,
-//   notes TEXT
-// )`, (err) => {
-//   if (err) {
-//     console.error(err.message, "(But that's okay.)");
-//   } else {
-//     // If table is just created, insert data from JSON file
-//     fs.readFile('./AcademyAwards.json', 'utf8', (err, data) => {
-//       if (err) throw err;
-//       let awards = JSON.parse(data);
-//       let stmt = db.prepare('INSERT INTO awards (year, ceremony, ceremony_date, film_years, category, original_category, imdb, tmdb, release_date, img, isActing, isWinner, title, names, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-//       for (let award of awards) {
-//         let isActing = (award.isActing.toLowerCase() === 'true') ? 1 : 0;
-//         let isWinner = (award.isWinner.toLowerCase() === 'true') ? 1 : 0;
-//         stmt.run([award.year, award.ceremony, award.ceremony_date, award.film_years, award.category, award.original_category, award.imdb, award.tmdb, award.release_date, award.img, isActing, isWinner, award.title, JSON.stringify(award.names), award.notes]);
-//       }
-//       stmt.finalize();
-//     });
-//   }
-// });
+db.run(`CREATE TABLE awards (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  year INTEGER,
+  ceremony INTEGER,
+  ceremony_date TEXT,
+  film_years TEXT,
+  category TEXT,
+  original_category TEXT,
+  imdb TEXT,
+  tmdb TEXT,
+  release_date TEXT,
+  img TEXT,
+  isActing TEXT,
+  isWinner TEXT,
+  title TEXT,
+  names TEXT,
+  notes TEXT
+)`, (err) => {
+  if (err) {
+    console.error(err.message, "(But that's okay.)");
+  } else {
+    // If table is just created, insert data from JSON file
+    fs.readFile('./AcademyAwards.json', 'utf8', (err, data) => {
+      if (err) throw err;
+      let awards = JSON.parse(data);
+    
+      // Preprocess the data
+      awards = awards.map(award => {
+        award.isActing = (award.isActing.toLowerCase() === 'true') ? 1 : 0;
+        award.isWinner = (award.isWinner.toLowerCase() === 'true') ? 1 : 0;
+        return award;
+      });
+    
+      let stmt = db.prepare('INSERT INTO awards (year, ceremony, ceremony_date, film_years, category, original_category, imdb, tmdb, release_date, img, isActing, isWinner, title, names, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+      for (let award of awards) {
+        stmt.run([award.year, award.ceremony, award.ceremony_date, award.film_years, award.category, award.original_category, award.imdb, award.tmdb, award.release_date, award.img, award.isActing, award.isWinner, award.title, JSON.stringify(award.names), award.notes]);
+      }
+      stmt.finalize();
+    });
+  }
+});
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
