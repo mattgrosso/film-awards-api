@@ -171,8 +171,8 @@ app.get('/awards', (req, res) => {
       res.status(404).send('No awards found for these parameters');
     } else {
       rows.forEach(row => {
-        row.isActing = row.isActing === 1;
-        row.isWinner = row.isWinner === 1;
+        // row.isActing = row.isActing === 1;
+        // row.isWinner = row.isWinner === 1;
         try {
           const correctedNames = row.names.replace(/:(,|}|])/g, ':null$1');
           row.names = JSON.parse(JSON.parse(correctedNames));
