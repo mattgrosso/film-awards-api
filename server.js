@@ -1,4 +1,4 @@
-const cors = require('cors');
+// const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const express = require('express');
 const fs = require('fs');
@@ -31,7 +31,7 @@ const options = {
 const specs = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-app.use(cors());
+// app.use(cors());
 
 // Run this to clear the database
 // db.run(`DROP TABLE IF EXISTS awards`, (err) => {
