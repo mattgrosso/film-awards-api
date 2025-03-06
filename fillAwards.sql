@@ -1,0 +1,1 @@
+SELECT * FROM awards WHERE title = 'Titanic' AND category = 'Best Picture';
