@@ -18,7 +18,8 @@
       "Bash(sqlite3:*)",
       "Bash(grep:*)",
       "Bash(python3:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(touch:*)"
     ],
     "deny": [],
     "ask": []

@@ -82,10 +82,28 @@ npm run deploy
 ```
 
 The deploy script will:
-1. Check for uncommitted changes and offer to commit them
-2. Push changes to GitHub
-3. Railway automatically deploys from GitHub
-4. Display the live URL and deployment status
+1. **Auto-detect JSON updates** - Checks if `AcademyAwards.json` is newer than database
+2. **Smart database updates** - Rebuilds database automatically when JSON changes
+3. **Auto-commit database** - Creates descriptive commit messages for database updates  
+4. **Handle code changes** - Prompts for manual commits on non-database changes
+5. **Deploy to Railway** - Pushes to GitHub and triggers automatic deployment
+
+### Adding New Awards Data
+
+When new Oscar data is available (typically after the ceremony):
+
+```bash
+# 1. Copy/paste updated JSON over existing AcademyAwards.json
+# 2. Deploy with automatic database rebuild
+npm run deploy
+```
+
+The script will:
+- Detect the JSON file has been updated
+- Show you the new record count and latest year  
+- Ask if you want to rebuild the database
+- Auto-commit the database update with a descriptive message
+- Deploy everything to Railway automatically
 
 ### Manual Deployment
 
