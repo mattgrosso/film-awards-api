@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node server.js",
     "serve": "nodemon server.js",
-    "deploy": "./deploy.sh"
+    "deploy": "./deploy.sh",
+    "dev": "nodemon server.js",
+    "test-api": "curl http://localhost:3000/awards?year=2020"
   },
   "dependencies": {
     "cors": "^2.8.5",

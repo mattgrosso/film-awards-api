@@ -10,7 +10,11 @@
       "Bash(export PATH=\"$HOME/.railway/bin:$PATH\")",
       "Bash(railway --version)",
       "Bash(railway login:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(chmod:*)",
+      "Bash(npm run deploy:*)"
     ],
     "deny": [],
     "ask": []
