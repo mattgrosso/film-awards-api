@@ -2,6 +2,12 @@
 
 A comprehensive REST API for Academy Awards data from 1928 to 2024. Query Oscar winners, nominees, and detailed film information with powerful filtering capabilities.
 
+> **Retired from Railway (Sep 2026).** Cinema Roll now ships this dataset as a static
+> file (`cinemaroll/public/data/academy-awards.json`). This repo is still the source:
+> after each ceremony, update `AcademyAwards.json`, rebuild the database, run
+> `npm start`, and save `localhost:3000/awards` over that file. The Railway URL below
+> stops working once the Railway plan is cancelled.
+
 ## 🌐 Live API
 
 **Base URL:** `https://web-production-b8145.up.railway.app`  
